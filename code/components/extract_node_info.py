@@ -6,15 +6,11 @@ nodes = ["BusinessGroup", "Column", "Contact", "Database",
         "DataElement", "Model", "ModelVersion", "Report", 
         "ReportField", "ReportSection", "Table", "User"]
 
-# generate bigrams from the user question  
-def generate_bigrams(words):
-    n = len(words)
-    return [" ".join(words[i:i + 2]) for i in range(n - 1)] + words
-
 # match node from the list with generated bigrams
 def match_node(user_input):
     words = user_input.split()
-    bigrams = generate_bigrams(words)
+    n = len(words)
+    bigrams = [" ".join(words[i:i + 2]) for i in range(n - 1)] + words
     
     # Find the best matching node among the generated bigrams
     best_match, best_score = None, 0
@@ -30,6 +26,6 @@ def match_node(user_input):
         return None
 
 # Test
-user_input = "What is the busness grop of this company?" # purposely misspelled 
-result = match_node(user_input)
-print(result)
+# user_input = "What is the busness grop of this company?" # purposely misspelled 
+# result = match_node(user_input)
+# print(result)

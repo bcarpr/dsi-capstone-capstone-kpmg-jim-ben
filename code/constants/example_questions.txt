@@ -21,31 +21,37 @@ Reqs -> Rels: {"works on": [MAINTAINS, ENTITLED_ON, OWNS]}
 1. How many Business Groups are there?
         MATCH (n:BusinessGroup) 
         RETURN count(*);
+Answer: 13
 
 2. What type of database is Customer Service Database?
         MATCH (d:Database) 
         WHERE d.name CONTAINS "Customer" and d.name CONTAINS "Service"
         RETURN d.type;  
+Answer: relational
 
 3. What report is the regional sales breakdown report field part of?
         MATCH (r:ReportSection)
         WHERE r.name CONTAINS "Regional" and r.name CONTAINS "Sales" and r.name CONTAINS "Breakdown"
         MATCH (r)-[:PART_OF]-(report:Report) 
         RETURN report.name;
+Answer: Sales Peformance Dashboard
 
 4. Which users own the Customer Service Satisfaction Survey Analysis report?
         MATCH (u:User)-[:ENTITLED_ON]-(report:Report {name: "Customer Satisfaction Survey Analysis"}) 
         RETURN u.name;
+Answer: Marketing Manager and Product Manager
 
 5. What business group is the IT database associated with?
         MATCH (d:Database)-[:ASSOCIATED_WITH]->(bg:BusinessGroup)
         WHERE d.name CONTAINS "IT"
         RETURN bg.name
+Answer: Information Technology 
 
 
 6. What are all of the latest versions of models?
         MATCH (m:Model)-[:LATEST_VERSION]-(mv:ModelVersion) 
         RETURN m.name, mv.name;
+Answer: Sales Performance Prediction Model Version3, Inventory Management Prediction Model Version3, Financial Health Prediction Model Version3, Employee Productivity Prediction Model Version3, Customer Satisfaction Prediction Model Version3
 
 7. What is the mean absolute error of the latest Inventory Management model?
         MATCH (mv:ModelVersion)
@@ -55,6 +61,7 @@ Reqs -> Rels: {"works on": [MAINTAINS, ENTITLED_ON, OWNS]}
         WITH met
         WHERE met CONTAINS 'mean_absolute_error'
         RETURN btrim(split(met,':')[1]) as MeanAbsoluteError
+Answer: 0.7
 
 8. What are the root mean squared errors of all of the latest models? 
         MATCH (mv:ModelVersion)
@@ -65,16 +72,19 @@ Reqs -> Rels: {"works on": [MAINTAINS, ENTITLED_ON, OWNS]}
         WHERE met CONTAINS 'root_mean_squared_error'
         RETURN name, rtrim(btrim(split(met,':')[1]), '}') as RMSE
         ORDER BY toFloat(RMSE) ASC 
+Answer: 0.6 for Inventory Management Prediction Model Version3, 0.6 for Employee Productivity Prediction Model Version3, 0.6 for Customer Satisfaction Prediction Model Version3, 15000 for Sales Performance Prediction Model Version3
 
 9. Which users are entitled on the Executive Management Database and what are their accounts?
         MATCH (u:User)-[:ENTITLED_ON]-(db:Database)
         WHERE db.name CONTAINS "Executive" and db.name CONTAINS "Management"
         RETURN u.name, u.account
+Answer: Executive Managers and Strategy Analysts. The emails are exec_manager@executive.com and strategy_analyst@executive.com. 
 
 10. Which models use a random forest?
         MATCH (mv:ModelVersion)
         WHERE mv.model_parameters CONTAINS "Random" and mv.model_parameters CONTAINS "Forest"
         RETURN mv.name
+Answer: Employee Productivity Prediction Model Version3 and Customer Satisfaction Prediction Model Version3
 
 11. What databases are the user customer service analyst entitled to?
         MATCH (u:User)-[:ENTITLED_ON]-(db:Database)

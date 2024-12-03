@@ -212,7 +212,7 @@ def rag_chatbot(user_input):
         return NO_RESULTS_FOUND
 
     response = generate_final_output(openai, user_input, cypher_query_response)
-    return response
+    return cypher_query_response, response
 
 def execute_uncommon_query(user_input, embeddings):
     langchain_client = LangChainClient()
@@ -356,7 +356,7 @@ def main():
 
         # Call RAG chatbot
         logging.info("Started request execution")
-        response = rag_chatbot(prompt)
+        generated_query, response = rag_chatbot(prompt)
         logging.info("Finished request execution")
 
        

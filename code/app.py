@@ -29,6 +29,8 @@ from langchain_community.graphs import Neo4jGraph
 from dotenv import load_dotenv
 load_dotenv()
 
+embeddings_graphs = create_embeddings()
+
 # RAG Chatbot Orchestrator
 #     1. Intent matching to determine if user request is a common or uncommon
 #         - If its common, we use the extracted input parameter, update the expected Cypher query, and directly call Neo4j
@@ -38,7 +40,6 @@ load_dotenv()
 #     2. For common and uncommon Cypher query results, we pass the user request and query result to a LLM to generate the final response
 
 def rag_chatbot(user_input):
-    embeddings_graphs = create_embeddings()
     print("---------------------------------")
     print(f"User request: {user_input}")
     openai = OpenAiClient()

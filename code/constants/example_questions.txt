@@ -36,17 +36,16 @@ Answer: relational
         RETURN report.name;
 Answer: Sales Peformance Dashboard
 
-4. Which users own the Customer Service Satisfaction Survey Analysis report?
-        MATCH (u:User)-[:ENTITLED_ON]-(report:Report {name: "Customer Satisfaction Survey Analysis"}) 
+4. Which users own the Customer Satisfaction Survey Analysis report?
+        MATCH (u:User)-[:OWNS]-(report:Report {name: "Customer Satisfaction Survey Analysis"}) 
         RETURN u.name;
-Answer: Marketing Manager and Product Manager
+Answer: Customer Service Director
 
 5. What business group is the IT database associated with?
         MATCH (d:Database)-[:ASSOCIATED_WITH]->(bg:BusinessGroup)
         WHERE d.name CONTAINS "IT"
         RETURN bg.name
 Answer: Information Technology 
-
 
 6. What are all of the latest versions of models?
         MATCH (m:Model)-[:LATEST_VERSION]-(mv:ModelVersion) 
@@ -80,7 +79,7 @@ Answer: 0.6 for Inventory Management Prediction Model Version3, 0.6 for Employee
         RETURN u.name, u.account
 Answer: Executive Managers and Strategy Analysts. The emails are exec_manager@executive.com and strategy_analyst@executive.com. 
 
-10. Which models use a random forest?
+10. Which models use a Random Forest?
         MATCH (mv:ModelVersion)
         WHERE mv.model_parameters CONTAINS "Random" and mv.model_parameters CONTAINS "Forest"
         RETURN mv.name
@@ -90,60 +89,71 @@ Answer: Employee Productivity Prediction Model Version3 and Customer Satisfactio
         MATCH (u:User)-[:ENTITLED_ON]-(db:Database)
         WHERE u.name CONTAINS "customer" and u.name CONTAINS "service" and u.name CONTAINS "analyst"
         RETURN db.name
+Answer: Customer_Service_Database
 
-12. What algorithms do all of the models use?
-        MATCH (mv:ModelVersion)
-        WHERE mv.latest_version = "True"
-        RETURN mv.name, mv.model_parameters;
+12. Who has write access to the Operations_Database?
+        MATCH (db:Database)<-[:ENTITLED_ON]-(u:User)
+        WHERE db.name CONTAINS "Operations" AND "write" in u.entitlement
+        RETURN u.name
+Answer: operations_manager
 
 13. What columns does the service tickets table have?
         MATCH (t:Table)-[:HAS_COLUMN]->(c:Column)
         WHERE t.name CONTAINS "Service" and t.name CONTAINS "Tickets"
         RETURN c.name
+Answer: TicketID CustomerID IssueDescription ServiceTicketOpenDate ServiceTicketCloseDate TicketStatus TicketResolution
 
 14. What tables do the marketing database contain?
         MATCH (t:Table)<-[:CONTAINS]-(db:Database)
         WHERE db.name CONTAINS "Marketing"
-        RETURN t.name 
+        RETURN t.name
+Answer: Campaigns Social Media Posts Market Research Public Relations Events
 
 15. What business group is the Employee Productivity Report associated with?
         MATCH (r:Report)-[:ASSOCIATED_WITH]->(bg:BusinessGroup)
         WHERE r.name CONTAINS "Employee" and r.name CONTAINS "Productivity"
         return bg.name
+Answer: human_resources
 
 16. What business group is the user sales analyst involved with?
         MATCH (u:User)-[:ENTITLED_ON]->(db:Database)
         WHERE u.name CONTAINS "sales" and u.name CONTAINS "analyst"
         MATCH (db)-[:ASSOCIATED_WITH]->(bg:BusinessGroup)
         RETURN bg.name
+Answer: sales
 
 
 17. List all users who work on Inventory Management Report and their contributions
         MATCH (u:User)-[r]->(rp:Report)
         WHERE rp.name CONTAINS "Inventory" and rp.name CONTAINS "Management"
-        RETURN u.name, r 
+        RETURN u.name, r
+Answer: Warehouse Supervisor [:ENTITLED_ON], Procurement Specialist [:ENTITLED_ON], Inventory Manager [:OWNS], Supply Chain Analyst [:MAINTAINS]
 
 18. What tables does the executive management database contain?
         MATCH (db:Database)-[:CONTAINS]->(t:Table)
         WHERE db.name CONTAINS "Executive" and db.name CONTAINS "Management"
         RETURN t.name
+Answers: Departments, Strategic Initiatives, Performance Metrics
 
 19. Name all of the report fields in the Financial Health Dashboard report
         MATCH (r:Report)<-[:PART_OF]-(rs:ReportSection)
-        WHERE r.name CONTAINS "Financial" and r.name CONTAINS "Health" 
+        WHERE r.name CONTAINS "Financial" and r.name CONTAINS "Health"
         MATCH (rs)<-[:BELONGS_TO]-(rf:ReportField)
         RETURN rf.name
+Answer: Top Expense Categories, Cost Reduction Opportunities, Net Cash Flow, Cash Flow Trends, Predicted Revenue for Next Quarter, Revenue Confidence Interval
 
 20. Which models are used to create the Employee Productivity Report?
         MATCH (r:Report)<-[:PART_OF]-(rs:ReportSection)<-[:BELONGS_TO]-(rf:ReportField)<-[:FEEDS]-(db:DataElement)<-[:PRODUCES]-(mv:ModelVersion)<-[:LATEST_VERSION]-(m:Model)
         WHERE r.name CONTAINS "Employee" and r.name CONTAINS "Productivity"
-        RETURN m.name 
+        RETURN m.name
+Answer: "Employee Productivity Prediction Model"
 
 
 21. Who are the creators of the Sales Performance Dashboard Report?
-        MATCH (u:User)-[r]->(rp:Report) 
-        WHERE rp.name = 'Sales Performance Dashboard' 
-        RETURN u.name, r
+        MATCH (u:User)-[r]->(rp:Report)
+        WHERE rp.name = 'Sales Performance Dashboard'
+        RETURN u.name
+Answer: Product Manager, Regional Manager, Sales Director, Sales Data Analyst
 
 22. Give a summary of the sections in each report.
         MATCH (rs:ReportSection)-[:PART_OF]->(r:Report) 

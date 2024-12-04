@@ -1,5 +1,5 @@
 {
-  "database_name": "Product_Database",
+  "database_name": "Product Database",
   "type": "relational",
   "tables": [
     {

@@ -131,7 +131,7 @@ def execute_uncommon_query(user_input, embeddings):
         # Retrieve relevant nodes 
         answer = cypher_query_response[1]
         if not answer["context"]:
-            n = 2 # number of nodes for context
+            n = 5 # number of nodes for context
             cypher_n_docs = cypher_query_documents[0:n]
             first_n_docs = "\n".join([doc.page_content for doc in cypher_n_docs])
             node_names = re.findall(r"name:\s*(.*)", first_n_docs)
@@ -156,7 +156,7 @@ def execute_uncommon_query(user_input, embeddings):
             print("CYPHER QUERY EXECUTED SUCCESSFULLY!")
 
         #Parameter Correction - if necessary
-        if len(cypher_query_documents) == 0:
+        if len(cypher_query_documents) == 0 and not cypher_query_response:
             print("NOTE: No data was found from LangChain call, trying parameter correction\n")
             input_corrector = ParameterCorrection()
             updated_user_input = input_corrector.generate_response(user_input, '')

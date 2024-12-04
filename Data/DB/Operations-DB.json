@@ -1,5 +1,5 @@
 {
-  "database_name": "Operations_Database",
+  "database_name": "Operations Database",
   "type": "relational",
   "tables": [
     {

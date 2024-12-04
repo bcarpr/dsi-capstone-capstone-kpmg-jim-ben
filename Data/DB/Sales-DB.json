@@ -1,5 +1,5 @@
 {
-  "database_name": "Sales_Database",
+  "database_name": "Sales Database",
   "type": "relational",
   "tables": [
     {

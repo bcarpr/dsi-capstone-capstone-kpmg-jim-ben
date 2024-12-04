@@ -1,5 +1,5 @@
 {
-  "database_name": "R&D_Database",
+  "database_name": "R&D Database",
   "type": "relational",
   "tables": [
     {

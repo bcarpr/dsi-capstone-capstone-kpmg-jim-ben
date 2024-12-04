@@ -1,5 +1,5 @@
 {
-  "database_name": "HR_Database",
+  "database_name": "HR Database",
   "type": "relational",
   "tables": [
     {
